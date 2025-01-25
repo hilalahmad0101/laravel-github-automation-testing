@@ -1,0 +1,34 @@
+name: Laravel Message Testing
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  message-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+      uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, mysql
+          ini-values: post_max_size=256M, upload_max_filesize=256M
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-ansi --prefer-dist --no-suggest --no-progress
+
+      - name: Perform action on success
+        if: success()
+        run: echo "Tests passed, proceeding with further actions."
+      - name: Perform action on failure
+        if: failure()
+        run: echo "Tests failed, stopping further actions."
