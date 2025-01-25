@@ -26,9 +26,14 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-ansi --prefer-dist --no-suggest --no-progress
 
+      - name: Run tests
+        run: php artisan test
+
       - name: Perform action on success
         if: success()
         run: echo "Tests passed, proceeding with further actions."
+
+
       - name: Perform action on failure
         if: failure()
         run: echo "Tests failed, stopping further actions."
